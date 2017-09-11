@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
@@ -47,7 +48,7 @@ public class App extends JFrame {
 		try {
 			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("sdjen/test/random_double/random.png"))
 					.getImage());
-			// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.mac.MacLookAndFeel");
 		} catch (Exception e2) {
 		}

@@ -28,6 +28,7 @@ public class ItemPanel extends JPanel {
 	public ItemPanel() {
 		setLayout(new BorderLayout());
 		add(scrollPane = new JScrollPane(table = new JTable(model)), BorderLayout.CENTER);
+		table.setShowHorizontalLines(false);
 		setPreferredSize(new Dimension(200, 0));
 		setValue(null);
 	}
