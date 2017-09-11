@@ -81,7 +81,7 @@ public class App extends JFrame {
 		scrollPane.setPreferredSize(new Dimension(0, 200));
 		panel.add(scrollPane, BorderLayout.NORTH);
 		add(btnPanel, BorderLayout.SOUTH);
-		btnPanel.add(reloadbtn = new JButton("重新加载"));
+		btnPanel.add(reloadbtn = new JButton("加载配置"));
 		final JButton actbtn = new JButton("重新抽签");
 		btnPanel.add(actbtn);
 		JButton abortbtn = new JButton("退出");
@@ -100,6 +100,7 @@ public class App extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					JFileChooser chooser = new JFileChooser(null == f ? new File(".") : f);
+					chooser.setDialogTitle(App.this.getTitle()+"-"+"选择配置");
 					chooser.setFileFilter(new FileFilter() {
 						@Override
 						public String getDescription() {
@@ -111,38 +112,38 @@ public class App extends JFrame {
 							return f.getAbsolutePath().toLowerCase().endsWith(".xls");
 						}
 					});
-					chooser.showOpenDialog(App.this);
-					f = chooser.getSelectedFile();
-					if (null == f)
-						throw new Exception("表格未选择，请“重新加载”");
-					// 创建一个工作簿
-					Workbook workbook = Workbook.getWorkbook(f);
-					// 获得所有工作表
-					Sheet[] sheets = workbook.getSheets();
-					if (sheets.length < 1) {
-						throw new Exception("无效数据");
-					}
-					Sheet sheet = sheets[0];
-					int rows = sheet.getRows();// 获得行数
-					int cols = sheet.getColumns();// 获得列数
-					// 读取数据
-					model.setRowCount(0);
-					for (int col = 0; col < cols; col++) {
-						Item item = new Item();
-						item.title = sheet.getCell(col, 0).getContents();
-						String[] ft = sheet.getCell(col, 1).getContents().toLowerCase().split("~");
-						item.from = Integer.valueOf(ft[0].trim());
-						item.to = Integer.valueOf(ft[1].trim());
-						item.items = new ArrayList<String>();
-						for (int row = 2; row < rows; row++) {
-							String c = sheet.getCell(col, row).getContents().trim();
-							if (!c.isEmpty())
-								item.items.add(c);
+					if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(App.this)) {
+						f = chooser.getSelectedFile();
+						// 创建一个工作簿
+						Workbook workbook = Workbook.getWorkbook(f);
+						// 获得所有工作表
+						Sheet[] sheets = workbook.getSheets();
+						if (sheets.length < 1) {
+							throw new Exception("无效数据");
 						}
-						model.addRow(new Object[] { item.title, item.items.size(), item.from + "~" + item.to, item });
+						Sheet sheet = sheets[0];
+						int rows = sheet.getRows();// 获得行数
+						int cols = sheet.getColumns();// 获得列数
+						// 读取数据
+						model.setRowCount(0);
+						for (int col = 0; col < cols; col++) {
+							Item item = new Item();
+							item.title = sheet.getCell(col, 0).getContents();
+							String[] ft = sheet.getCell(col, 1).getContents().toLowerCase().split("~");
+							item.from = Integer.valueOf(ft[0].trim());
+							item.to = Integer.valueOf(ft[1].trim());
+							item.items = new ArrayList<String>();
+							for (int row = 2; row < rows; row++) {
+								String c = sheet.getCell(col, row).getContents().trim();
+								if (!c.isEmpty())
+									item.items.add(c);
+							}
+							model.addRow(
+									new Object[] { item.title, item.items.size(), item.from + "~" + item.to, item });
+						}
+						workbook.close();
+						actbtn.doClick();
 					}
-					workbook.close();
-					actbtn.doClick();
 				} catch (Exception e1) {
 					f = null;
 					e1.printStackTrace();
@@ -165,7 +166,7 @@ public class App extends JFrame {
 			}
 		});
 		btnPanel.add(abortbtn);
-		reloadbtn.doClick();
 		setVisible(true);
+		reloadbtn.doClick();
 	}
 }
