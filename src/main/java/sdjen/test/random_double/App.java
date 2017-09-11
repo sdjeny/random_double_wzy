@@ -78,7 +78,7 @@ public class App extends JFrame {
 		column.setMaxWidth(0);
 		column.setWidth(0);
 		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setPreferredSize(new Dimension(0, 200));
+		scrollPane.setPreferredSize(new Dimension(0, 150));
 		panel.add(scrollPane, BorderLayout.NORTH);
 		add(btnPanel, BorderLayout.SOUTH);
 		btnPanel.add(reloadbtn = new JButton("加载配置"));
