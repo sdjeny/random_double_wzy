@@ -70,6 +70,7 @@ public class App extends JFrame {
 			}
 		};
 		final JTable table = new JTable(model);
+		table.setRowHeight(22);
 		TableColumn column = table.getColumnModel().getColumn(0);
 		column.setPreferredWidth(200);
 		column = table.getColumnModel().getColumn(3);
